@@ -111,7 +111,7 @@ export const pokemonSlice = createSlice({
       if (action.payload === "select") {
         state.type = "";
       }
-      state.types = action.payload;
+      state.type = action.payload;
     },
     searchQuery: (state, action) => {
       if (action.payload === "select") {
