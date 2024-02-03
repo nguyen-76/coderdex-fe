@@ -109,7 +109,7 @@ export const pokemonSlice = createSlice({
     },
     typeQuery: (state, action) => {
       if (action.payload === "select") {
-        state.types = "";
+        state.type = "";
       }
       state.types = action.payload;
     },
@@ -118,7 +118,7 @@ export const pokemonSlice = createSlice({
         state.name = "";
       }
       state.name = action.payload;
-      state.types = "";
+      state.type = "";
     },
   },
   extraReducers: {
