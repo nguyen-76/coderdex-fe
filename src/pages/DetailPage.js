@@ -65,7 +65,7 @@ export const DetailPage = () => {
                 fontWeight={700}
                 marginRight={1}
               >
-                #{("0000" + (previousPokemon?.id || "0000")).slice(-4)}
+                #{("000" + (previousPokemon?.id || "000")).slice(-3)}
               </Typography>
               <Typography
                 display={{ xs: "none", sm: "block" }}
@@ -106,7 +106,7 @@ export const DetailPage = () => {
                   : "Unknown"}
               </Typography>
               <Typography color="white" fontSize={24} fontWeight={700}>
-                #{("0000" + (nextPokemon?.id || "0000")).slice(-4)}
+                #{("000" + (nextPokemon?.id || "000")).slice(-3)}
               </Typography>
               <ArrowForwardIosIcon
                 sx={{
@@ -137,12 +137,13 @@ export const DetailPage = () => {
                 : "Unknown"}
             </Typography>
             <Typography variant="h4" display="inline" color="gray">
-              #{("0000" + (pokemon?.id || "0000")).slice(-4)}
+              #{("000" + (pokemon?.id || "000")).slice(-3)}
             </Typography>
           </Box>
         </Box>
       </Box>
       <Box
+        container
         maxWidth="md"
         sx={{
           margin: "auto!important",
@@ -159,7 +160,7 @@ export const DetailPage = () => {
             >
               <CardMedia
                 component="img"
-                image={`${pokemon?.imageUrl}`}
+                image={`${pokemon?.url}`}
                 alt="Missing image"
                 sx={{
                   margin: "auto",
@@ -212,7 +213,7 @@ export const DetailPage = () => {
               </Grid>
               <Typography variant="p">Weaknesses</Typography>
               <Grid container spacing={1}>
-                {weaknesses?.map((type) => (
+                {weaknesses.map((type) => (
                   <Grid item key={type} xs={4}>
                     <PokeType type={type} size="large" color="white" />
                   </Grid>
@@ -354,11 +355,9 @@ const calculateWeaknesses = (types) => {
   };
 
   types.forEach((type) => {
-    if (!weaknesses[type.toLowerCase()]) return; // nếu chữ đầu sai qua chữ tiếp theo  xét tiếp
-
-    weaknesses[type.toLowerCase()].weak.forEach((t) => total[t]++);
-    weaknesses[type.toLowerCase()].resistant.forEach((t) => total[t]--);
-    weaknesses[type.toLowerCase()].nullified.forEach((t) => total[t]--);
+    weaknesses[type].weak.forEach((t) => total[t]++);
+    weaknesses[type].resistant.forEach((t) => total[t]--);
+    weaknesses[type].nullified.forEach((t) => total[t]--);
   });
   let final = [];
   Object.keys(total).forEach((type) => {
