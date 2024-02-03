@@ -97,6 +97,7 @@ export const pokemonSlice = createSlice({
     search: "",
     type: "",
     page: 1,
+    select: "",
   },
   reducers: {
     changePage: (state, action) => {
@@ -107,10 +108,17 @@ export const pokemonSlice = createSlice({
       }
     },
     typeQuery: (state, action) => {
-      state.type = action.payload;
+      if (action.payload === "select") {
+        state.types = "";
+      }
+      state.types = action.payload;
     },
     searchQuery: (state, action) => {
-      state.search = action.payload;
+      if (action.payload === "select") {
+        state.name = "";
+      }
+      state.name = action.payload;
+      state.types = "";
     },
   },
   extraReducers: {
