@@ -141,7 +141,9 @@ export const pokemonSlice = createSlice({
     },
     [getPokemonById.fulfilled]: (state, action) => {
       state.loading = false;
-      state.pokemon = action.payload;
+      state.pokemon.previousPokemon = action.payload[0];
+      state.pokemon.pokemon = action.payload[1];
+      state.pokemon.nextPokemon = action.payload[2];
     },
     [addPokemon.fulfilled]: (state) => {
       state.loading = false;
