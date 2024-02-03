@@ -4,11 +4,16 @@ import { POKEMONS_PER_PAGE } from "../../app/config";
 
 export const getPokemons = createAsyncThunk(
   "pokemons/getPokemons",
-  async ({ page, search, type }, { rejectWithValue }) => {
+  async ({ page, name, types, select }, { rejectWithValue }) => {
     try {
       let url = `/pokemons?page=${page}&limit=${POKEMONS_PER_PAGE}`;
-      if (search) url += `&search=${search}`;
-      if (type) url += `&type=${type}`;
+      if (select === "name") {
+        url += `&name=${name}`;
+      } else if (select === "types") {
+        url += `&types=${types}`;
+      } else if (select === "all") {
+        url += `&name=${name}&types=${types}`;
+      }
       const response = await apiService.get(url);
       const timeout = () => {
         return new Promise((resolve) => {
