@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import {
   changePage,
-  searchName,
   typeQuery,
   selectQuery,
 } from "../features/pokemons/pokemonSlice";
@@ -69,8 +68,6 @@ export const SearchBox = () => {
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    console.log(data);
-    dispatch(searchName(data.name));
     dispatch(typeQuery(data.types));
     dispatch(selectQuery(data.select));
     dispatch(changePage(1));
