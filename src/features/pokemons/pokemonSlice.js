@@ -4,27 +4,21 @@ import { POKEMONS_PER_PAGE } from "../../app/config";
 
 export const getPokemons = createAsyncThunk(
   "pokemons/getPokemons",
-  async ({ page, name, types, select }, { rejectWithValue }) => {
+  async ({ page, search, type }, { rejectWithValue }) => {
     try {
       let url = `/pokemons?page=${page}&limit=${POKEMONS_PER_PAGE}`;
-      if (select === "name") {
-        url += `&name=${name}`;
-      } else if (select === "types") {
-        url += `&types=${types}`;
-      } else if (select === "all") {
-        url += `&name=${name}&types=${types}`;
-      }
-
+      if (search) url += `&search=${search}`;
+      if (type) url += `&type=${type}`;
       const response = await apiService.get(url);
       const timeout = () => {
         return new Promise((resolve) => {
           setTimeout(() => {
             resolve("ok");
-          }, 500);
+          }, 1000);
         });
       };
       await timeout();
-      return response;
+      return response.data;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -33,12 +27,12 @@ export const getPokemons = createAsyncThunk(
 
 export const getPokemonById = createAsyncThunk(
   "pokemons/getPokemonById",
-  async (pokemonId, { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
-      let url = `/pokemons/${pokemonId}`;
+      let url = `/pokemons/${id}`;
       const response = await apiService.get(url);
-      if (!response) return rejectWithValue({ message: "No data" });
-      return response;
+      if (!response.data) return rejectWithValue({ message: "No data" });
+      return response.data;
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -47,10 +41,10 @@ export const getPokemonById = createAsyncThunk(
 
 export const addPokemon = createAsyncThunk(
   "pokemons/addPokemon",
-  async ({ name, id, imageUrl, types }, { rejectWithValue }) => {
+  async ({ name, id, imgUrl, types }, { rejectWithValue }) => {
     try {
       let url = "/pokemons";
-      await apiService.post(url, { name, id, imageUrl: imageUrl, types });
+      await apiService.post(url, { name, id, url: imgUrl, types });
       return;
     } catch (error) {
       return rejectWithValue(error);
@@ -95,10 +89,9 @@ export const pokemonSlice = createSlice({
       nextPokemon: null,
       previousPokemon: null,
     },
-    name: "",
-    types: "",
+    search: "",
+    type: "",
     page: 1,
-    select: "",
   },
   reducers: {
     changePage: (state, action) => {
@@ -109,21 +102,10 @@ export const pokemonSlice = createSlice({
       }
     },
     typeQuery: (state, action) => {
-      if (action.payload === "select") {
-        state.types = "";
-      }
-      state.types = action.payload;
+      state.type = action.payload;
     },
-    searchName: (state, action) => {
-      if (action.payload === "select") {
-        state.name = "";
-      }
-      state.name = action.payload;
-      state.types = "";
-    },
-    selectQuery: (state, action) => {
-      state.select = action.payload;
-      state.pokemons = [];
+    searchQuery: (state, action) => {
+      state.search = action.payload;
     },
   },
   extraReducers: {
@@ -159,9 +141,7 @@ export const pokemonSlice = createSlice({
     },
     [getPokemonById.fulfilled]: (state, action) => {
       state.loading = false;
-      state.pokemon.previousPokemon = action.payload[0];
-      state.pokemon.pokemon = action.payload[1];
-      state.pokemon.nextPokemon = action.payload[2];
+      state.pokemon = action.payload;
     },
     [addPokemon.fulfilled]: (state) => {
       state.loading = false;
@@ -217,5 +197,5 @@ export const pokemonSlice = createSlice({
 });
 
 const { actions, reducer } = pokemonSlice;
-export const { changePage, searchName, typeQuery, selectQuery } = actions;
+export const { changePage, searchQuery, typeQuery } = actions;
 export default reducer;
