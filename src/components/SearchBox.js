@@ -76,8 +76,8 @@ export const SearchBox = () => {
             <Typography variant="h5">Name or Number</Typography>
             <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
               <Stack direction="row" alignItems="center" spacing={2}>
+                <FTextField name="search" sx={styles.inputText} />
                 <IconButton type="submit">
-                  <FTextField name="search" sx={styles.inputText} />
                   <SearchOutlined sx={styles.icon} />
                 </IconButton>
               </Stack>
