@@ -1,22 +1,16 @@
 import { SearchOutlined } from "@mui/icons-material";
-import { Stack, Container, Grid, Typography, IconButton } from "@mui/material";
+import { Stack, Container, Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import {
-  changePage,
-  typeQuery,
-  searchQuery,
-} from "../features/pokemons/pokemonSlice";
-import { FormProvider, FRadioGroup, FTextField } from "./form";
-import PokeTypeList from "./PokeTypeList";
+import { changePage, searchQuery } from "../features/pokemons/pokemonSlice";
+import { FormProvider, FTextField } from "./form";
 
 const styles = {
   container: {
-    // padding: '0!important',
     color: "white",
-    backgroundColor: "grey",
+    backgroundColor: "black",
     display: "flex",
     justifyContent: "center",
   },
@@ -55,21 +49,16 @@ const styles = {
 };
 
 const defaultValues = {
-  name: "",
-  select: "name",
-  types: "",
+  search: "",
 };
 
-export const FILTER_SELECT_OPTIONS = ["name", "types", "all"];
-
 export const SearchBox = () => {
-  const methods = useForm({ defaultValues });
+  const methods = useForm(defaultValues);
   const { handleSubmit } = methods;
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    dispatch(typeQuery(data.types));
-    dispatch(searchQuery(data.select));
+    dispatch(searchQuery(data.search));
     dispatch(changePage(1));
   };
 
@@ -84,29 +73,17 @@ export const SearchBox = () => {
       >
         <Grid item xs={12} sm={12} md={6} sx={styles.center}>
           <Stack sx={{ width: { xs: "90%", md: "100%" } }}>
-            <Typography variant="h5">Name</Typography>
+            <Typography variant="h5">Name or Number</Typography>
             <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
               <Stack direction="row" alignItems="center" spacing={2}>
-                <FTextField name="name" sx={styles.inputText} />
-                <IconButton type="submit">
-                  <SearchOutlined sx={styles.icon} />
-                </IconButton>
+                <FTextField name="search" sx={styles.inputText} />
+                <SearchOutlined sx={styles.icon} />
               </Stack>
-              <Typography>
-                Use the Advanced Search to explore Pokémon by type, weakness,
-                Ability, and more!
-              </Typography>
-              <FRadioGroup
-                name="select"
-                options={FILTER_SELECT_OPTIONS}
-                sx={{
-                  ".css-hyxlzm": {
-                    color: "white",
-                  },
-                }}
-              />
-              <PokeTypeList name="types" />
             </FormProvider>
+            <Typography>
+              Use the Advanced Search to explore Pokémon by type, weakness,
+              Ability, and more!
+            </Typography>
           </Stack>
         </Grid>
         <Grid item xs={12} sm={12} md={6} sx={styles.center}>
