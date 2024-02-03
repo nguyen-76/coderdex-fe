@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import {
   changePage,
   typeQuery,
-  selectQuery,
+  searchQuery,
 } from "../features/pokemons/pokemonSlice";
 import { FormProvider, FRadioGroup, FTextField } from "./form";
 import PokeTypeList from "./PokeTypeList";
@@ -69,7 +69,7 @@ export const SearchBox = () => {
 
   const onSubmit = (data) => {
     dispatch(typeQuery(data.types));
-    dispatch(selectQuery(data.select));
+    dispatch(searchQuery(data.select));
     dispatch(changePage(1));
   };
 
